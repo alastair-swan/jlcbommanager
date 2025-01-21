@@ -1,0 +1,14 @@
+{
+  "name": "jlcbommanager",
+  "version": "0.0.1",
+  "description": "Project for managing Fusion360 BOMs and PnP files for use by JLCPCB",
+  "main": "src/ndex.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alastair Swan",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "react": "^19.0.0"
+  }
+}
