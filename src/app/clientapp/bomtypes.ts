@@ -1,11 +1,12 @@
 export type BOMPart = {
-    partnumber: String|undefined,
-    value: String|undefined,
-    JLC: String|undefined,
+    partnumber: string|undefined,
+    value: string|undefined,
+    JLC: string|undefined,
     items: Array<BOMItem|Array<BOMItem>>
 }
 
 export type BOMItem = {
+    identifier: string,
     x: number,
     y: number,
     rotation: number,

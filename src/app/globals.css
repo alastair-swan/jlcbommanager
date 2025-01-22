@@ -16,6 +16,33 @@ body {
   overflow-x: hidden;
 }
 
+th {
+  text-align: left;
+  border-bottom: 1px solid;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+td {
+  text-align: left;
+  padding-left: 2px;
+  padding-right: 2px;
+  border-right: 1px dashed #404040
+}
+
+tr {
+  padding-left: 2px;
+  padding-right: 2px;
+  border-bottom: 1px solid;
+  border-bottom-color: #404040;
+}
+
+
+table {
+  border-collapse: collapse;
+  border: 1px solid;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
@@ -39,4 +66,42 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+input[type=text]:focus,
+input[type=text]:active{
+  outline: 0;
+}
+
+input[type=text] {
+  background-color: #0a0a0a;
+  border: 0;
+
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  position: absolute;
+  z-index: 1;
+  width: 120px;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px; 
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
