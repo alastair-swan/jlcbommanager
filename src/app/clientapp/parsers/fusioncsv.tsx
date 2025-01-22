@@ -12,7 +12,7 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
     for (var frontpnpindex = 0; frontpnpindex < pnpf.length; frontpnpindex++){
         pnp.push(
             {
-                identifier: pnpf[frontpnpindex].identifier,
+                id: pnpf[frontpnpindex].identifier,
                 x: pnpf[frontpnpindex].x,
                 y: pnpf[frontpnpindex].y,
                 rotation: pnpf[frontpnpindex].rotation,
@@ -23,7 +23,7 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
     for (var backpnpindex = 0; backpnpindex < pnpb.length; backpnpindex++){
         pnp.push(
             {
-                identifier: pnpb[backpnpindex].identifier,
+                id: pnpb[backpnpindex].identifier,
                 x: pnpb[backpnpindex].x,
                 y: pnpb[backpnpindex].y,
                 rotation: pnpb[backpnpindex].rotation,
@@ -34,6 +34,7 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
 
     for (var bomindex = 0; bomindex < bomdata.length; bomindex++){
         const pn = bomdata[bomindex].Device != undefined ? bomdata[bomindex].Device : bomdata[bomindex].Footprint
+        const pac = bomdata[bomindex].Package
         const val = bomdata[bomindex].Value != undefined ? bomdata[bomindex].Value : bomdata[bomindex].Comment
         const JLC = bomdata[bomindex]["JLCPCB Part #"]
         var itemlist = bomdata[bomindex].Parts != undefined ? bomdata[bomindex].Parts : bomdata[bomindex].Designator
@@ -44,7 +45,7 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         }
         for (var i = 0; i < itemlist.length; i++){
             for (var j = 0; j < pnp.length; j++){
-                if (itemlist[i] === pnp[j].identifier){
+                if (itemlist[i] === pnp[j].id){
                     items.push(pnp[j])
                     continue
                 }
@@ -52,7 +53,9 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         }
         
         bom.push({
+            id: bomindex,
             partnumber: pn,
+            package: pac,
             value: val,
             JLC: JLC,
             items: items

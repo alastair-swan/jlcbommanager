@@ -61,7 +61,10 @@ function LoadBOM(){
                         Value
                     </th>
                     <th>
-                        Footprint
+                        Part
+                    </th>
+                    <th>
+                        Package
                     </th>
                     <th>
                         JLCPCB Part #
@@ -83,6 +86,9 @@ function LoadBOM(){
                                 <DataField defaultValue={d.partnumber === undefined ? "" : d.partnumber} />
                             </td>
                             <td>
+                                <DataField defaultValue={d.package === undefined ? "" : d.package} />
+                            </td>
+                            <td>
                                 <DataField defaultValue={d.JLC === undefined ? "" : d.JLC} />
                             </td>
                             <td>
@@ -90,13 +96,13 @@ function LoadBOM(){
                                 d.items.map((d1: BOMItem|Array<BOMItem>, i1) => {
                                     if (Array.isArray(d1)){
                                         d1.map((d2, i2) => {
-                                            return <span key={i2} className="tooltip">{d2.identifier}, <span className="tooltiptext"></span></span>
+                                            return <span key={i2} className="tooltip">{d2.id}, <span className="tooltiptext"></span></span>
                                         })
                                     }
                                     else{
                                         return (
                                         <span key={i1} className="tooltip" style={{paddingLeft: "2px", paddingRight: "2px"}}>
-                                            { d1.identifier }
+                                            { d1.id }
                                             <span className="tooltiptext">
                                                 x: {d1.x}mm<br/>
                                                 y: {d1.y}mm<br/>
