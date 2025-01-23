@@ -23,12 +23,12 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
     const bom: Array<BOMPart> = []
 
     for (let frontpnpindex = 0; frontpnpindex < pnpf.length; frontpnpindex++){
-        let l
+        let l: string
         if (pnpf[frontpnpindex].layer != undefined)
-            l = pnpf[frontpnpindex].layer
+            l = pnpf[frontpnpindex].layer as string
         else if (pnpf[frontpnpindex].Layer != undefined)
-            l = (pnpf[frontpnpindex].Layer != undefined)
-        if (l === "Bottom" || l === "Back")
+            l    = (pnpf[frontpnpindex].Layer != undefined)
+        if (l)
             l = "Bottom"
         else
             l = "Top"
@@ -78,7 +78,8 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
     for (let bomindex = 0; bomindex < bomdata.length; bomindex++){
         const pn = (bomdata[bomindex].Device != undefined ? bomdata[bomindex].Device : bomdata[bomindex].Footprint) as string
         const pac = (bomdata[bomindex].Package != undefined ? bomdata[bomindex].Package : bomdata[bomindex].Footprint) as string
-        const val = (bomdata[bomindex].Value != undefined ? bomdata[bomindex].Value : bomdata[bomindex].Comment) as string
+        const val0 = (bomdata[bomindex].Value != undefined ? bomdata[bomindex].Value : bomdata[bomindex].Comment)
+        const val = typeof(val0) === "string" ? val0 : '"'.concat(val0.toString()).concat('"')
         const JLC = (bomdata[bomindex]["JLCPCB Part #"] != undefined ? bomdata[bomindex]["JLCPCB Part #"] : "") as string
         let itemlist = bomdata[bomindex].Parts != undefined ? bomdata[bomindex].Parts : bomdata[bomindex].Designator
         const items: Array<BOMItem> = []

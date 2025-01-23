@@ -147,7 +147,8 @@ function BOMOutput({bom}: {bom: BOMPart[] | undefined}){
     if (bom != undefined){
         BOMCSV = 'Comment,Designator,Footprint,JLCPCB Part #\n'
         bom.map((d, i) => {
-            BOMCSV = BOMCSV.concat(d.value.value).concat(', ')
+            BOMCSV = BOMCSV.concat(d.value.value)
+            BOMCSV = BOMCSV.concat(', ')
             if (d.items.value.length > 1)
                 BOMCSV = BOMCSV.concat('"')
             d.items.value.map((d1, i1) => {
@@ -180,7 +181,8 @@ function CPLOutput({bom}: {bom: BOMPart[] | undefined}){
         CPLCSV = "Designator, Mid X, Mid Y, Layer, Rotation\n"
         bom.map((d) => {
             d.items.value.map((d1) =>{
-                CPLCSV = CPLCSV.concat(d1.id).concat(", ").concat(d1.x.value).concat(", ").concat(d1.y.value).concat(", ").concat(d1.layer.value === "Bottom" ? "Bottom" : "Top").concat(", ").concat(d1.rotation.value).concat("\n")
+                CPLCSV = CPLCSV.concat(d1.id).concat(", ").concat(d1.x.value).concat(", ").concat(d1.y.value).concat(", ")
+                CPLCSV = CPLCSV.concat(d1.layer.value === "Bottom" ? "Bottom" : "Top").concat(", ").concat(d1.rotation.value).concat("\n")
             })
         })
     }
