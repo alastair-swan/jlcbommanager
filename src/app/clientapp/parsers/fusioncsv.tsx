@@ -13,10 +13,10 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         pnp.push(
             {
                 id: pnpf[frontpnpindex].identifier,
-                x: pnpf[frontpnpindex].x,
-                y: pnpf[frontpnpindex].y,
-                rotation: pnpf[frontpnpindex].rotation,
-                layer: pnpf[frontpnpindex].layer != undefined ? pnpf[frontpnpindex].layer : "top"
+                x: {value: pnpf[frontpnpindex].x, default: pnpf[frontpnpindex].x},
+                y: {value: pnpf[frontpnpindex].y, default: pnpf[frontpnpindex].y},
+                rotation: { value: pnpf[frontpnpindex].rotation, default: pnpf[frontpnpindex].rotation}, 
+                layer: {value: pnpf[frontpnpindex].layer != undefined ? pnpf[frontpnpindex].layer : "top", default: pnpf[frontpnpindex].layer != undefined ? pnpf[frontpnpindex].layer : "top"}
             }
         )
     }
@@ -24,10 +24,10 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         pnp.push(
             {
                 id: pnpb[backpnpindex].identifier,
-                x: pnpb[backpnpindex].x,
-                y: pnpb[backpnpindex].y,
-                rotation: pnpb[backpnpindex].rotation,
-                layer: pnpb[backpnpindex].layer != undefined ? pnpb[backpnpindex].layer : "back"
+                x: { value: pnpb[backpnpindex].x, default: pnpb[backpnpindex].x },
+                y: { value: pnpb[backpnpindex].y, default: pnpb[backpnpindex].y },
+                rotation: { value: pnpb[backpnpindex].rotation, default: pnpb[backpnpindex].rotation },
+                layer: {value: pnpb[backpnpindex].layer != undefined ? pnpb[backpnpindex].layer : "back", default: pnpb[backpnpindex].layer != undefined ? pnpb[backpnpindex].layer : "back"}
             }
         )
     }
@@ -36,10 +36,9 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         const pn = bomdata[bomindex].Device != undefined ? bomdata[bomindex].Device : bomdata[bomindex].Footprint
         const pac = bomdata[bomindex].Package
         const val = bomdata[bomindex].Value != undefined ? bomdata[bomindex].Value : bomdata[bomindex].Comment
-        const JLC = bomdata[bomindex]["JLCPCB Part #"]
+        const JLC = bomdata[bomindex]["JLCPCB Part #"] != undefined ? bomdata[bomindex]["JLCPCB Part #"] : ""
         var itemlist = bomdata[bomindex].Parts != undefined ? bomdata[bomindex].Parts : bomdata[bomindex].Designator
         const items: Array<BOMItem> = []
-        console.log(itemlist)
         if (typeof(itemlist) === 'string'){
             itemlist = [itemlist]
         }
@@ -54,15 +53,15 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         
         bom.push({
             id: bomindex,
-            partnumber: pn,
-            package: pac,
-            value: val,
-            JLC: JLC,
-            items: items
+            partnumber: {value: pn, default: pn},
+            package: {value: pac, default: pac},
+            value: {value: val, default: val},
+            JLC: {value: JLC, default: JLC},
+            items: {value: items, default: items}
         })
     }
 
-    console.log(bom)
+    //console.log(bom)
 
     return bom
 }

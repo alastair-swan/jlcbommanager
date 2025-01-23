@@ -1,20 +1,20 @@
 export type BOMPart = {
     id: number,
-    partnumber: string|undefined,
-    package: string|undefined,
-    value: string|undefined,
-    JLC: string|undefined,
-    items: Array<BOMItem>
+    partnumber: {value: string, default: string},
+    package: {value: string, default: string},
+    value: {value: string, default: string},
+    JLC: {value: string, default: string},
+    items: {value: Array<BOMItem>, default: Array<BOMItem>} 
 }
 
 export type BOMPartKey = "partnumber"|"package"|"value"|"JLC"
 
 export type BOMItem = {
     id: string,
-    x: string,
-    y: string,
-    rotation: string,
-    layer: "Top"|"Bottom"|undefined
+    x: {value: string, default: string},
+    y: {value: string, default: string},
+    rotation: {value: string, default: string},
+    layer: {value: "Top"|"Bottom"|undefined, default: "Top"|"Bottom"|undefined}
 }
 
 export type BOMItemKey = "x"|"y"|"rotation"|"layer"
