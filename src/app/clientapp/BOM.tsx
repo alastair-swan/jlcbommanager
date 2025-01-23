@@ -10,7 +10,7 @@ export default function BOM(){
     </div>
 }
 
-function DataField ({value = "", defaultValue, setValue, style = {}, children}: {value: string, defaultValue: string, setValue: (newvalue: string) => void, style?: Object, children?: React.ReactNode}){
+function DataField ({value = "", defaultValue, setValue, style = {}, children}: {value: string, defaultValue: string, setValue: (newvalue: string) => void, style?: object, children?: React.ReactNode}){
     return <div>
         <input type="text" value={value} style={style} onChange={(e) => {setValue(e.target.value)}}/>{children}
         {
@@ -19,7 +19,7 @@ function DataField ({value = "", defaultValue, setValue, style = {}, children}: 
     </div>
 }
 
-function LayerSelector ({value = "Top", defaultValue = "Top", setValue, style = {}, children}: {value: "Top"|"Bottom", defaultValue: "Top"|"Bottom", setValue: (newvalue: "Top"|"Bottom") => void, style?: Object, children?: React.ReactNode}){
+function LayerSelector ({value = "Top", defaultValue = "Top", setValue, style = {}, children}: {value: "Top"|"Bottom", defaultValue: "Top"|"Bottom", setValue: (newvalue: "Top"|"Bottom") => void, style?: object, children?: React.ReactNode}){
     return <div>
         <select name="Layer" value={value} onChange={(e) => setValue(e.target.value === "Bottom" ? "Bottom" : "Top")} style={style}>
             <option value="Top">Top</option>
@@ -36,7 +36,7 @@ function Load (){
     const [bom, setBom] = useState<Array<BOMPart>>()
 
     return <div style={{display: 'grid', gap: '20px', columnCount: 3}}>
-        <div style={{gridColumnStart: 1, gridColumnEnd: 4}}><LoadBOM bom={bom} setBom={setBom}/></div>
+        <div style={{gridColumnStart: 1, gridColumnEnd: 4}}><LoadBOM setBom={setBom}/></div>
         <div style={{gridColumn: 1}}><BOMInputTable bom={bom} setBom={setBom}/></div>
         <div style={{gridColumn: 2}}><BOMOutput bom={bom} /></div>
         <div style={{gridColumn: 3}}><CPLOutput bom={bom} /></div>
@@ -120,7 +120,7 @@ function BOMInputTable({bom, setBom}: {bom: BOMPart[] | undefined, setBom: Dispa
 }
 
 function download(filename: string, text: string) {
-    var element = document.createElement('a');
+    const element = document.createElement('a');
     element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(text));
     element.setAttribute('download', filename);
   
@@ -135,15 +135,15 @@ function download(filename: string, text: string) {
 function countMaxLines (bom: BOMPart[] | undefined): number{
     if (bom === undefined)
         return 2
-    var count = 2
-    bom.map((d, i) => {
+    let count = 2
+    bom.map((d) => {
         count = count + d.items.value.length
     })
     return count
 }
 
 function BOMOutput({bom}: {bom: BOMPart[] | undefined}){
-    var BOMCSV = "This is the output BOM"
+    let BOMCSV = "This is the output BOM"
     if (bom != undefined){
         BOMCSV = 'Comment,Designator,Footprint,JLCPCB Part #\n'
         bom.map((d, i) => {
@@ -175,11 +175,11 @@ function BOMOutput({bom}: {bom: BOMPart[] | undefined}){
 
 function CPLOutput({bom}: {bom: BOMPart[] | undefined}){
 
-    var CPLCSV = "This is the output CPL"
+    let CPLCSV = "This is the output CPL"
     if (bom != undefined){
         CPLCSV = "Designator, Mid X, Mid Y, Layer, Rotation\n"
-        bom.map((d, i) => {
-            d.items.value.map((d1, i1) =>{
+        bom.map((d) => {
+            d.items.value.map((d1) =>{
                 CPLCSV = CPLCSV.concat(d1.id).concat(", ").concat(d1.x.value).concat(", ").concat(d1.y.value).concat(", ").concat(d1.layer.value === "Bottom" ? "Bottom" : "Top").concat(", ").concat(d1.rotation.value).concat("\n")
             })
         })
@@ -196,7 +196,7 @@ function CPLOutput({bom}: {bom: BOMPart[] | undefined}){
         </div>
 }
 
-function LoadBOM({bom, setBom}: {bom: BOMPart[] | undefined, setBom: Dispatch<SetStateAction<BOMPart[] | undefined>>}){
+function LoadBOM({setBom}: {setBom: Dispatch<SetStateAction<BOMPart[] | undefined>>}){
 
     const [bomcontents, setBOMContents] = useState<string>("")
     const [pnpfront, setPnPFront] = useState<{data: string,enabled: boolean}>({data: "", enabled: true})

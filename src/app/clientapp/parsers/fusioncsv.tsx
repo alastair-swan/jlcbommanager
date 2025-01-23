@@ -15,8 +15,8 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
     const pnp: Array<BOMItem> = []
     const bom: Array<BOMPart> = []
 
-    for (var frontpnpindex = 0; frontpnpindex < pnpf.length; frontpnpindex++){
-        var l
+    for (let frontpnpindex = 0; frontpnpindex < pnpf.length; frontpnpindex++){
+        let l
         if (pnpf[frontpnpindex].layer != undefined)
             l = pnpf[frontpnpindex].layer
         else if (pnpf[frontpnpindex].Layer != undefined)
@@ -26,13 +26,13 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         else
             l = "Top"
 
-        var x = pnpf[frontpnpindex].x != undefined ? pnpf[frontpnpindex].x : pnpf[frontpnpindex]["Mid X"]
-        var y = pnpf[frontpnpindex].y != undefined ? pnpf[frontpnpindex].y : pnpf[frontpnpindex]["Mid Y"]
-        var r = pnpf[frontpnpindex].rotation != undefined ? pnpf[frontpnpindex].rotation : pnpf[frontpnpindex].Rotation
+        const x: string = (pnpf[frontpnpindex].x != undefined ? pnpf[frontpnpindex].x : pnpf[frontpnpindex]["Mid X"]) as string
+        const y: string = (pnpf[frontpnpindex].y != undefined ? pnpf[frontpnpindex].y : pnpf[frontpnpindex]["Mid Y"]) as string
+        const r: string = (pnpf[frontpnpindex].rotation != undefined ? pnpf[frontpnpindex].rotation : pnpf[frontpnpindex].Rotation) as string
         
         pnp.push(
             {
-                id: pnpf[frontpnpindex].identifier != undefined ? pnpf[frontpnpindex].identifier : pnpf[frontpnpindex].Designator,
+                id: (pnpf[frontpnpindex].identifier != undefined ? pnpf[frontpnpindex].identifier : pnpf[frontpnpindex].Designator) as string,
                 x: {value: x, default: x},
                 y: {value: y, default: y},
                 rotation: { value: r, default: r}, 
@@ -41,9 +41,9 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
             }
         )
     }
-    for (var backpnpindex = 0; backpnpindex < pnpb.length; backpnpindex++){
+    for (let backpnpindex = 0; backpnpindex < pnpb.length; backpnpindex++){
 
-        var l
+        let l
         if (pnpb[backpnpindex].layer != undefined)
             l = pnpb[backpnpindex].layer
         else if (pnpb[backpnpindex].Layer != undefined)
@@ -53,12 +53,12 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         else
             l = "Bottom"
 
-        var x = pnpb[backpnpindex].x != undefined ? pnpb[backpnpindex].x : pnpb[backpnpindex]["Mid X"]
-        var y = pnpb[backpnpindex].y != undefined ? pnpb[backpnpindex].y : pnpb[backpnpindex]["Mid Y"]
-        var r = pnpb[backpnpindex].rotation != undefined ? pnpb[backpnpindex].rotation : pnpb[backpnpindex].Rotation
+        const x = (pnpb[backpnpindex].x != undefined ? pnpb[backpnpindex].x : pnpb[backpnpindex]["Mid X"]) as string
+        const y = (pnpb[backpnpindex].y != undefined ? pnpb[backpnpindex].y : pnpb[backpnpindex]["Mid Y"]) as string
+        const r = (pnpb[backpnpindex].rotation != undefined ? pnpb[backpnpindex].rotation : pnpb[backpnpindex].Rotation) as string
         pnp.push(
             {
-                id: pnpb[backpnpindex].identifier != undefined ? pnpb[backpnpindex].identifier : pnpb[backpnpindex].Designator,
+                id: (pnpb[backpnpindex].identifier != undefined ? pnpb[backpnpindex].identifier : pnpb[backpnpindex].Designator) as string,
                 x: { value: x, default: x },
                 y: { value: y, default: y },
                 rotation: { value: r, default: r },
@@ -68,19 +68,19 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         )
     }
 
-    for (var bomindex = 0; bomindex < bomdata.length; bomindex++){
-        const pn = bomdata[bomindex].Device != undefined ? bomdata[bomindex].Device : bomdata[bomindex].Footprint
-        const pac = bomdata[bomindex].Package != undefined ? bomdata[bomindex].Package : bomdata[bomindex].Footprint
-        const val = bomdata[bomindex].Value != undefined ? bomdata[bomindex].Value : bomdata[bomindex].Comment
-        const JLC = bomdata[bomindex]["JLCPCB Part #"] != undefined ? bomdata[bomindex]["JLCPCB Part #"] : ""
-        var itemlist = bomdata[bomindex].Parts != undefined ? bomdata[bomindex].Parts : bomdata[bomindex].Designator
+    for (let bomindex = 0; bomindex < bomdata.length; bomindex++){
+        const pn = (bomdata[bomindex].Device != undefined ? bomdata[bomindex].Device : bomdata[bomindex].Footprint) as string
+        const pac = (bomdata[bomindex].Package != undefined ? bomdata[bomindex].Package : bomdata[bomindex].Footprint) as string
+        const val = (bomdata[bomindex].Value != undefined ? bomdata[bomindex].Value : bomdata[bomindex].Comment) as string
+        const JLC = (bomdata[bomindex]["JLCPCB Part #"] != undefined ? bomdata[bomindex]["JLCPCB Part #"] : "") as string
+        let itemlist = bomdata[bomindex].Parts != undefined ? bomdata[bomindex].Parts : bomdata[bomindex].Designator
         const items: Array<BOMItem> = []
         if (typeof(itemlist) === 'string'){
             itemlist = [itemlist]
         }
-        for (var i = 0; i < itemlist.length; i++){
-            var matchfound = false
-            for (var j = 0; j < pnp.length; j++){
+        for (let i = 0; i < itemlist.length; i++){
+            let matchfound = false
+            for (let j = 0; j < pnp.length; j++){
                 if (itemlist[i] === pnp[j].id){
                     items.push(pnp[j])
                     pnp[j].inUse = true
@@ -111,7 +111,7 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
     }
 
     const unusedPNP: BOMItem[] = []
-    pnp.map((d, i) => {
+    pnp.map((d) => {
         if (!d.inUse && d.id != "Designator"){
             unusedPNP.push(d)
         }
@@ -133,14 +133,15 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
     return bom
 }
 
-function CSVToArray(csvstring: string, headers: true|Array<string> = true): Array<any>{
+
+function CSVToArray(csvstring: string, headers: true|Array<string> = true): Array<{[key: string]: string|string[]}>{
     const lines = csvstring.split('\n')
     if (lines === undefined)
     {   
         throw new Error("Invalid BOM file, expected CSV file")
     } 
 
-    var tempheader: Array<string>
+    let tempheader: Array<string>
     if (typeof(headers) === "boolean")
         tempheader = CSVHeaderToArray(lines[0])
     else
@@ -150,15 +151,15 @@ function CSVToArray(csvstring: string, headers: true|Array<string> = true): Arra
     {
         const data = headers === true ? lines.slice(1) : lines
 
-        for (var i = 0; i < data.length; i++){
+        for (let i = 0; i < data.length; i++){
             if (data[i] != "")
                 datalines.push(CSVLineToArray(data[i]))
         }
     }
-    const data: Array<any> = []
-    for (var datarow = 0; datarow < datalines.length; datarow++){    
-        var newline = {}
-        var datacolumn = 0
+    const data: Array<{[key: string]: string|string[]}> = []
+    for (let datarow = 0; datarow < datalines.length; datarow++){    
+        let newline = {}
+        let datacolumn = 0
         while (header[datacolumn] != undefined && datalines[datarow][datacolumn] != undefined){
             const headeritem = header[datacolumn]
             newline = {
@@ -178,11 +179,11 @@ function CSVHeaderToArray(line: string): Array<string>{
     const pattern = RegExp('(?:(?:"(.*?)"|(.*?))(?:,|$))', 'gy')
     const linearray = Array<string>()
 
-    var dataitemarray = null
+    let dataitemarray = null
     const maxitems = 100
     while (dataitemarray = pattern.exec(line)){
-        var dataitem: string = ""
-        for (var i = dataitemarray.length-1; i >= 0; i--){
+        let dataitem: string = ""
+        for (let i = dataitemarray.length-1; i >= 0; i--){
             if (dataitemarray[i] != undefined){
                 dataitem = dataitemarray[i] 
                 break
@@ -202,11 +203,11 @@ function CSVLineToArray(line: string): CSVItem{
     const partlistpatern = RegExp(',')
     const linearray = Array<CSVItem>()
 
-    var dataitemarray = null
+    let dataitemarray = null
     const maxitems = 200
     while ( !(linearray.length >= maxitems || pattern.lastIndex === line.length) && (dataitemarray = pattern.exec(line))){
-        var dataitem: CSVItem = ""
-        for (var i = dataitemarray.length-1; i >= 0; i--){
+        let dataitem: CSVItem = ""
+        for (let i = dataitemarray.length-1; i >= 0; i--){
             if (dataitemarray[i] != undefined){
                 dataitem = dataitemarray[i].trim()
                 //console.log(dataitem)
