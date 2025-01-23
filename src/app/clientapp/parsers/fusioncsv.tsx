@@ -22,44 +22,50 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
     const pnp: Array<BOMItem> = []
     const bom: Array<BOMPart> = []
 
-    for (let frontpnpindex = 0; frontpnpindex < pnpf.length; frontpnpindex++){
-        let l: string
-        if (pnpf[frontpnpindex].layer != undefined)
-            l = pnpf[frontpnpindex].layer as string
-        else if (pnpf[frontpnpindex].Layer != undefined)
-            l    = (pnpf[frontpnpindex].Layer != undefined)
-        if (l)
-            l = "Bottom"
-        else
-            l = "Top"
+    const detectLayer = (item: {[key: string]: string | string[]}, ifnotfound: "Top"|"Bottom"): "Top"|"Bottom" => 
+    {
+        let internal = undefined
+        if(item.Layer != undefined)
+            internal = item.Layer
+        if(item.layer != undefined)
+            internal = item.layer
+        if (internal != undefined){
+            if (typeof(internal) === 'string'){
+                switch(internal){
+                    case "Top":
+                    case "top":
+                    case "front":
+                    case "Front":
+                        return "Top"
+                    case "Bottom":
+                    case "bottom":
+                    case "Back":
+                    case "back":
+                        return "Bottom"
+                }
+            }
+        }
+        return ifnotfound
+    }
 
+    for (let frontpnpindex = 0; frontpnpindex < pnpf.length; frontpnpindex++){
+        const l = detectLayer(pnpf[frontpnpindex], "Top")
         const x: string = (pnpf[frontpnpindex].x != undefined ? pnpf[frontpnpindex].x : pnpf[frontpnpindex]["Mid X"]) as string
         const y: string = (pnpf[frontpnpindex].y != undefined ? pnpf[frontpnpindex].y : pnpf[frontpnpindex]["Mid Y"]) as string
         const r: string = (pnpf[frontpnpindex].rotation != undefined ? pnpf[frontpnpindex].rotation : pnpf[frontpnpindex].Rotation) as string
-        //console.log(pnpf[frontpnpindex])
         pnp.push(
             {
                 id: (pnpf[frontpnpindex].identifier != undefined ? pnpf[frontpnpindex].identifier : pnpf[frontpnpindex].Designator) as string,
                 x: {value: x, default: x},
                 y: {value: y, default: y},
                 rotation: { value: r, default: r}, 
-                layer: {value: l as "Top"|"Bottom", default: l as "Top"|"Bottom"},
+                layer: {value: l, default: l},
                 hasPNP: true
             }
         )
     }
     for (let backpnpindex = 0; backpnpindex < pnpb.length; backpnpindex++){
-
-        let l
-        if (pnpb[backpnpindex].layer != undefined)
-            l = pnpb[backpnpindex].layer
-        else if (pnpb[backpnpindex].Layer != undefined)
-            l = (pnpb[backpnpindex].Layer != undefined)
-        if (l === "Top" || l === "Front")
-            l = "Top"
-        else
-            l = "Bottom"
-
+        const l = detectLayer(pnpb[backpnpindex], "Bottom")
         const x = (pnpb[backpnpindex].x != undefined ? pnpb[backpnpindex].x : pnpb[backpnpindex]["Mid X"]) as string
         const y = (pnpb[backpnpindex].y != undefined ? pnpb[backpnpindex].y : pnpb[backpnpindex]["Mid Y"]) as string
         const r = (pnpb[backpnpindex].rotation != undefined ? pnpb[backpnpindex].rotation : pnpb[backpnpindex].Rotation) as string
@@ -69,7 +75,7 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
                 x: { value: x, default: x },
                 y: { value: y, default: y },
                 rotation: { value: r, default: r },
-                layer: {value: l as "Top"|"Bottom", default: l as "Top"|"Bottom"},
+                layer: {value: l, default: l},
                 hasPNP: true
             }
         )
