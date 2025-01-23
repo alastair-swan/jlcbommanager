@@ -3,11 +3,18 @@ import { BOMPart, BOMItem } from "../bomtypes"
 
 export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: string, pnpheaders: true|Array<string> = ["identifier", "x", "y", "rotation", "value", "partnumber"]): Array<BOMPart>{
     
-    if (bomfile.startsWith("Designator"))
-        pnpheaders = ["Designator","Mid X","Mid Y","Layer","Rotation"]
-    
+
     const bomdata = CSVToArray(bomfile)
+    const pnpheaderdefault = pnpheaders != true ? [...pnpheaders] : []
+    if (pnpfront.startsWith("Designator"))
+        pnpheaders = ["Designator","Mid X","Mid Y","Layer","Rotation"]
+    else
+        pnpheaders = pnpheaderdefault
     const pnpf = CSVToArray(pnpfront, pnpheaders)
+    if (pnpback.startsWith("Designator"))
+        pnpheaders = ["Designator","Mid X","Mid Y","Layer","Rotation"]
+    else
+        pnpheaders = pnpheaderdefault
     const pnpb = CSVToArray(pnpback, pnpheaders)
 
     //console.log(pnpf)
@@ -29,7 +36,7 @@ export function parseFusionCSV(bomfile: string, pnpfront: string, pnpback: strin
         const x: string = (pnpf[frontpnpindex].x != undefined ? pnpf[frontpnpindex].x : pnpf[frontpnpindex]["Mid X"]) as string
         const y: string = (pnpf[frontpnpindex].y != undefined ? pnpf[frontpnpindex].y : pnpf[frontpnpindex]["Mid Y"]) as string
         const r: string = (pnpf[frontpnpindex].rotation != undefined ? pnpf[frontpnpindex].rotation : pnpf[frontpnpindex].Rotation) as string
-        
+        //console.log(pnpf[frontpnpindex])
         pnp.push(
             {
                 id: (pnpf[frontpnpindex].identifier != undefined ? pnpf[frontpnpindex].identifier : pnpf[frontpnpindex].Designator) as string,
@@ -147,6 +154,7 @@ function CSVToArray(csvstring: string, headers: true|Array<string> = true): Arra
     else
         tempheader = headers
     const header = tempheader
+    //console.log(header)
     const datalines: Array<CSVItem> = []
     {
         const data = headers === true ? lines.slice(1) : lines
@@ -221,5 +229,8 @@ function CSVLineToArray(line: string): CSVItem{
         }
         linearray.push(dataitem)
     }
+    //console.log(linearray)
+    //console.log(line)
+    //console.log(line.split(","))
     return linearray
 }
