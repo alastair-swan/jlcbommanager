@@ -15,6 +15,8 @@ export type BOMItem = {
     y: {value: string, default: string},
     rotation: {value: string, default: string},
     layer: {value: "Top"|"Bottom"|undefined, default: "Top"|"Bottom"|undefined}
+    hasPNP: boolean
+    inUse?: boolean
 }
 
 export type BOMItemKey = "x"|"y"|"rotation"|"layer"
