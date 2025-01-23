@@ -96,7 +96,10 @@ function BOMInputTable({bom, setBom}: {bom: BOMPart[] | undefined, setBom: Dispa
                                 else{
                                     return (
                                     <span key={i1} className="tooltip" style={{paddingLeft: "2px", paddingRight: "2px"}}>
-                                        { d1.id }
+                                        { 
+                                            d1.hasPNP ? <span>{d1.id}</span> :
+                                            <span color="yellow">{d1.id}</span> 
+                                        }
                                         <span className="tooltiptext">
                                             x: {d1.x.value}mm<br/>
                                             y: {d1.y.value}mm<br/>
@@ -200,7 +203,7 @@ function LoadBOM({bom, setBom}: {bom: BOMPart[] | undefined, setBom: Dispatch<Se
     const [pnpback, setPnPBack] = useState<{data: string,enabled: boolean}>({data: "", enabled: true})
 
     const handleLoadButtonClick = () => {
-        setBom(parseFusionCSV(bomcontents, pnpfront.data, pnpback.data))
+        setBom(parseFusionCSV(bomcontents, pnpfront.enabled ? pnpfront.data : "", pnpback.enabled ? pnpback.data : ""))
     }
 
     return (
@@ -278,7 +281,13 @@ function LoadBOM({bom, setBom}: {bom: BOMPart[] | undefined, setBom: Dispatch<Se
                 </div>
             </div>
             <div style={{gridColumnStart: 1, gridColumnEnd: 4, display: 'flex', justifyContent: "center", alignItems: 'center'}}>
-                <button style={{padding: '10px'}} disabled={bomcontents === "" || (pnpfront.enabled && pnpfront.data === "") || (pnpback.enabled && pnpback.data === "")} onClick={handleLoadButtonClick}>Parse Files</button>
+                <button style={{padding: '10px'}} disabled={bomcontents === "" || (pnpfront.enabled && pnpfront.data === "") || (pnpback.enabled && pnpback.data === "") || (!pnpfront.enabled && !pnpback.enabled)} onClick={handleLoadButtonClick}>
+                    {
+                        bomcontents === "" ? "A BOM file is required" :
+                        ((!pnpfront.enabled || pnpfront.data === "") && (!pnpback.enabled || pnpback.data === "")) ? "At least one PnP file is required" :
+                        "Parse Files"
+                    }
+                </button>
             </div>
         </div>
     )
